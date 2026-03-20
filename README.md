@@ -1,5 +1,5 @@
 # qi-ta
-Technical Analysis library. q port of [ta-lib](https://ta-lib.org).
+Technical Analysis: thin q wrapper around [ta-lib](https://ta-lib.org).
 
 ## Feedback and Suggestions
 
