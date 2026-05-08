@@ -9,6 +9,9 @@
 
 {sv[`;`.ta,x]set .ta.LIB 2:(`$"ta_",ssr[string x;".";"_"];.ta.FUNCS x)}each key .ta.FUNCS;
 
+.ta.bbandsx:.ta.bbands
+.ta.bbands:{[a;b;c;d;e] flip .ta.bbandsx[a;b;c;d;e]}
+
 /.ta.sma       :.ta.LIB 2:(`ta_sma;        2);  // prices; period
 
 // ---------------------------------------------------------------------------
