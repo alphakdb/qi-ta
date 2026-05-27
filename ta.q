@@ -5,7 +5,9 @@
 
 // MAType constants matching ta_defs.h TA_MAType enum
 .ta.MA:`sma`ema`wma`dema`tema`trima`kama`mama`t3!til 9;
-.ta.FUNCS:(!).("SJ";",")0:.qi.path(.qi.pkgs`ta;`functions.csv)
+{r:("SJS";",")0:.qi.path(.qi.pkgs`ta;`functions.csv);
+ .ta.FUNCS:(r 0)!r 1;
+ .ta.ARGTYPES:(r 0)!string each r 2}[]
 
 {sv[`;`.ta,x]set .ta.LIB 2:(`$"ta_",ssr[string x;".";"_"];.ta.FUNCS x)}each key .ta.FUNCS;
 
@@ -17,8 +19,10 @@
 // ---------------------------------------------------------------------------
 .ta._orig:()!();
 
-.ta._apply:{[f;args]
-  vecs:where(type each args)in 7 8 9h;             // long/real/float lists only (not scalar params)
+.ta._apply:{[nm;f;args]
+  if[count typs:.ta.ARGTYPES nm;
+    args:{[t;a]$[t="l";`long$a;t="d";`float$a;a]}'[typs;args]];
+  vecs:where(type each args)in 7 8 9h;
   n:$[count vecs;max{(mins null x)?0b}each args vecs;0];
   if[n=0;:f . args];
   res:f . @[args;vecs;n _];
@@ -33,7 +37,7 @@
   .ta._orig[nm]:get sv[`;`.ta,nm];
   n:.ta.FUNCS nm;
   args:";"sv string(`x`y`z`arg3`arg4`arg5`arg6`arg7)til n;
-  sv[`;`.ta,nm]set value"{[",args,"] .ta._apply[.ta._orig[`",string[nm],"]; (",args,")]}";
+  sv[`;`.ta,nm]set value"{[",args,"] .ta._apply[`",string[nm],";.ta._orig[`",string[nm],"]; (",args,")]}";
  }each key .ta.FUNCS;
 
 /.ta.sma       :.ta.LIB 2:(`ta_sma;        2);  // prices; period
