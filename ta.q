@@ -12,6 +12,30 @@
 .ta.bbandsx:.ta.bbands
 .ta.bbands:{[a;b;c;d;e] flip .ta.bbandsx[a;b;c;d;e]}
 
+// ---------------------------------------------------------------------------
+// Null-safe wrappers: strip leading 0N from numeric vector inputs, re-pad output
+// ---------------------------------------------------------------------------
+.ta._orig:()!();
+
+.ta._apply:{[f;args]
+  vecs:where(type each args)in 7 8 9h;             // long/real/float lists only (not scalar params)
+  n:$[count vecs;max{(mins null x)?0b}each args vecs;0];
+  if[n=0;:f . args];
+  res:f . @[args;vecs;n _];
+  pad:{(x#0Nf),y}[n];
+  $[98h=type res;flip(key d)!pad each value d:flip res;
+    99h=type res;(key res)!pad each value res;
+    pad res]
+ };
+
+// Re-wrap each function; use dict lookup for orig to allow names starting with digits (cdl.2crows etc)
+{[nm]
+  .ta._orig[nm]:get sv[`;`.ta,nm];
+  n:.ta.FUNCS nm;
+  args:";"sv string(`x`y`z`arg3`arg4`arg5`arg6`arg7)til n;
+  sv[`;`.ta,nm]set value"{[",args,"] .ta._apply[.ta._orig[`",string[nm],"]; (",args,")]}";
+ }each key .ta.FUNCS;
+
 /.ta.sma       :.ta.LIB 2:(`ta_sma;        2);  // prices; period
 
 // ---------------------------------------------------------------------------
